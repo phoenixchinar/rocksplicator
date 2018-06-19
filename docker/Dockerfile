@@ -5,7 +5,7 @@ MAINTAINER Bo Liu <bol@pinterest.com>
 
 LABEL version=0.1
 
-ARG BUILD_JOBS=10
+ARG BUILD_JOBS=2
 ENV BUILD_JOBS ${BUILD_JOBS}
 
 
