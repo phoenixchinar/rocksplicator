@@ -34,16 +34,10 @@
 #include "rocksdb_replicator/non_blocking_condition_variable.h"
 #include "rocksdb_replicator/thrift/gen-cpp2/Replicator.h"
 #include "folly/SocketAddress.h"
+#include "folly/executors/CPUThreadPoolExecutor.h"
 #include "rocksdb/db.h"
 #include "thrift/lib/cpp2/server/ThriftServer.h"
 
-namespace folly {
-  class Executor;
-}
-
-namespace wangle {
-  class CPUThreadPoolExecutor;
-}
 
 namespace replicator {
 
@@ -119,7 +113,13 @@ class RocksDBReplicator {
     void cleanIdleCachedIters();
 
     const std::string db_name_;
+#ifdef EXPOSE_UNDERLYING_DB   
+   public: 
     std::shared_ptr<rocksdb::DB> db_;
+   private:
+#else    
+    std::shared_ptr<rocksdb::DB> db_;
+#endif    
     folly::Executor* const executor_;
     const DBRole role_;
     const folly::SocketAddress upstream_addr_;
@@ -210,9 +210,11 @@ class RocksDBReplicator {
   };
 
   RocksDBReplicator();
+ public:
   ~RocksDBReplicator();
+ private:
 
-  std::unique_ptr<wangle::CPUThreadPoolExecutor> executor_;
+  std::unique_ptr<folly::CPUThreadPoolExecutor> executor_;
 
   common::ThriftClientPool<ReplicatorAsyncClient> client_pool_;
 

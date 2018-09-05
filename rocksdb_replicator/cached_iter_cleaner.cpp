@@ -17,7 +17,8 @@
 //
 
 #include <folly/io/async/EventBase.h>
-#include <folly/ThreadName.h>
+#include <folly/system/ThreadName.h>
+#include <folly/executors/CPUThreadPoolExecutor.h>
 #include <gflags/gflags.h>
 
 #include "rocksdb_replicator/rocksdb_replicator.h"

@@ -22,7 +22,8 @@
 
 #include "gtest/gtest.h"
 #include "rocksdb_replicator/non_blocking_condition_variable.h"
-#include "wangle/concurrent/CPUThreadPoolExecutor.h"
+#include "folly/executors/CPUThreadPoolExecutor.h"
+#include "folly/init/Init.h"
 
 using replicator::detail::NonBlockingConditionVariable;
 using std::atomic;
@@ -32,13 +33,13 @@ using std::thread;
 using std::this_thread::sleep_for;
 using std::unique_ptr;
 using std::vector;
-using wangle::BlockingQueue;
-using wangle::LifoSemMPMCQueue;
-using CPUTask = wangle::CPUThreadPoolExecutor::CPUTask;
+using folly::BlockingQueue;
+using folly::LifoSemMPMCQueue;
+using CPUTask = folly::CPUThreadPoolExecutor::CPUTask;
 
 unique_ptr<BlockingQueue<CPUTask>> queue =
   std::make_unique<LifoSemMPMCQueue<CPUTask>>(1 << 18);
-wangle::CPUThreadPoolExecutor g_executor(8, std::move(queue));
+folly::CPUThreadPoolExecutor g_executor(8, std::move(queue));
 const int kPauseTimeMs = 250;
 
 TEST(NonBlockingConditionVariableTest, Basics) {
@@ -149,6 +150,7 @@ TEST(NonBlockingConditionVariableTest, Stress) {
 }
 
 int main(int argc, char** argv) {
+  folly::Init init(&argc, &argv);
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
 }

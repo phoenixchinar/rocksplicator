@@ -18,7 +18,7 @@
 
 #pragma once
 
-namespace wangle {
+namespace folly {
 
 class CPUThreadPoolExecutor;
 
@@ -33,6 +33,6 @@ namespace common {
  * GFlag of thread count. In case that happens, we will fallback to use the
  * number of cores as the thread pool size.
  */
-wangle::CPUThreadPoolExecutor* getGlobalCPUExecutor();
+folly::CPUThreadPoolExecutor* getGlobalCPUExecutor();
 
 }  // namespace common

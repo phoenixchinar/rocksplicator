@@ -4,16 +4,19 @@ set(GEN_FILES
     "gen-cpp2/rocksdb_admin_types.tcc"
     "gen-cpp2/rocksdb_admin_types.cpp"
     "gen-cpp2/rocksdb_admin_types.h"
+    "gen-cpp2/rocksdb_admin_data.h"
+    "gen-cpp2/rocksdb_admin_data.cpp"
     "gen-cpp2/rocksdb_admin_constants.h"
     "gen-cpp2/rocksdb_admin_constants.cpp"
     "gen-cpp2/Admin.tcc"
     "gen-cpp2/Admin.cpp"
     "gen-cpp2/Admin.h"
-    "gen-cpp2/Admin_client.cpp")
+    "gen-cpp2/AdminAsyncClient.cpp")
 
 add_custom_command(
   OUTPUT ${GEN_FILES}
-  COMMAND python -mthrift_compiler.main --gen cpp2 -I. -o ./ ${CMAKE_CURRENT_SOURCE_DIR}/rocksdb_admin.thrift
+  COMMAND thrift1 --gen mstch_cpp2:include_prefix=${CMAKE_CURRENT_BINARY_DIR} -I .  --templates /usr/local/include/thrift/templates
+  -o ./ ${CMAKE_CURRENT_SOURCE_DIR}/rocksdb_admin.thrift
   DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/rocksdb_admin.thrift
 )
 

@@ -29,6 +29,7 @@
 #include "folly/futures/Promise.h"
 #include "folly/io/async/EventBase.h"
 #include "folly/SocketAddress.h"
+#include "folly/system/ThreadName.h"
 #include "thrift/lib/cpp/async/TAsyncSocket.h"
 #include "thrift/lib/cpp/transport/THeader.h"
 #include "thrift/lib/cpp2/async/HeaderClientChannel.h"

@@ -21,7 +21,7 @@
 #include <gflags/gflags.h>
 
 #include "common/global_cpu_executor.h"
-#include "wangle/concurrent/CPUThreadPoolExecutor.h"
+#include "folly/executors/CPUThreadPoolExecutor.h"
 
 DEFINE_bool(delayed_future_with_cpu_executor, false,
             "If offload the work from FutureTimekeepr to global cpu pool");

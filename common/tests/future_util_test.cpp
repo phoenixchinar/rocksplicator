@@ -13,7 +13,7 @@
 /// limitations under the License.
 
 #include "common/future_util.h"
-
+#include "folly/init/Init.h"
 #include <atomic>
 #include <chrono>
 #include <functional>
@@ -195,5 +195,6 @@ TEST_F(FutureUtilTest, BothFailedWithPrimaryBeforeSpeculativeCall) {
 
 int main(int argc, char** argv) {
   ::testing::InitGoogleTest(&argc, argv);
+   folly::Init init(&argc, &argv);
   return RUN_ALL_TESTS();
 }

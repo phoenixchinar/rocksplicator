@@ -18,9 +18,9 @@
 //
 
 #include "gtest/gtest.h"
-#define private public
+#define EXPOSE_UNDERLYING_DB
 #include "rocksdb_admin/admin_handler.h"
-#undef private
+#undef EXPOSE_UNDERLYING_DB
 #include "rocksdb_admin/gen-cpp2/Admin.h"
 
 using admin::AdminAsyncClient;

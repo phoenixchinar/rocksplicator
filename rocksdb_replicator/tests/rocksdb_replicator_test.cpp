@@ -23,8 +23,10 @@
 
 // we need this hack to use RocksDBReplicator::RocksDBReplicator(), which is
 // private
-#define private public
+//#define private public
+#define EXPOSE_UNDERLYING_DB
 #include "rocksdb_replicator/rocksdb_replicator.h"
+#undef EXPOSE_UNDERLYING_DB
 
 using folly::SocketAddress;
 using replicator::DBRole;

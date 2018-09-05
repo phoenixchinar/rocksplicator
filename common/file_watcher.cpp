@@ -19,8 +19,8 @@
 #include "common/file_watcher.h"
 
 #include <folly/FileUtil.h>
-#include <folly/SpookyHashV2.h>
-#include <folly/ThreadName.h>
+#include <folly/hash/SpookyHashV2.h>
+#include <folly/system/ThreadName.h>
 #include <sys/inotify.h>
 
 #include <string>
