@@ -23,7 +23,7 @@
 #include <string>
 
 #include "rocksdb_replicator/replicator_handler.h"
-#include "wangle/concurrent/CPUThreadPoolExecutor.h"
+#include "folly/executors/CPUThreadPoolExecutor.h"
 
 DEFINE_int32(rocksdb_replicator_port, 9091,
              "The port # for the internal thrift server.");
@@ -43,9 +43,9 @@ RocksDBReplicator::RocksDBReplicator()
     , server_("disabled", false)
     , thread_()
     , cleaner_() {
-  executor_ = std::make_unique<wangle::CPUThreadPoolExecutor>(
+  executor_ = std::make_unique<folly::CPUThreadPoolExecutor>(
     std::max(FLAGS_rocksdb_replicator_executor_threads, 16),
-    std::make_shared<wangle::NamedThreadFactory>("Replicator"));
+    std::make_shared<folly::NamedThreadFactory>("Replicator"));
 
   server_.setInterface(std::make_unique<ReplicatorHandler>(&db_map_));
   server_.setPort(FLAGS_rocksdb_replicator_port);

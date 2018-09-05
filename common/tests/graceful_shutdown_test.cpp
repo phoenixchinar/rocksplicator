@@ -21,8 +21,9 @@
 #include <chrono>
 #include <string>
 
-#include "folly/Baton.h"
+#include "folly/synchronization/Baton.h"
 #include "folly/io/async/AsyncSignalHandler.h"
+#include "folly/init/Init.h"
 #include "gtest/gtest.h"
 
 #include "common/graceful_shutdown_handler.h"
@@ -102,14 +103,14 @@ TEST_F(GracefulShutdownTest, OneOutstandingRequestTest) {
   sleep(1);
   // now allow the request to finish
   handler_->baton_.post();
-  EXPECT_EQ(successful_result.get(), 123);
+  EXPECT_EQ(std::move(successful_result).get(), 123);
 
   // make sure server is shut down
   server_thread.join();
 
   // send a request after shutdown
   auto failure_result = client->future_getSomething(options, 456);
-  EXPECT_THROW(failure_result.get(), TTransportException);
+  EXPECT_THROW(std::move(failure_result).get(), TTransportException);
 }
 
 TEST_F(GracefulShutdownTest, TwoOutstandingRequestTest) {
@@ -136,8 +137,8 @@ TEST_F(GracefulShutdownTest, TwoOutstandingRequestTest) {
   sleep(1);
   // now allow the request to finish
   handler_->baton_.post();
-  EXPECT_EQ(successful_result.get(), 123);
-  EXPECT_EQ(successful_result2.get(), 456);
+  EXPECT_EQ(std::move(successful_result).get(), 123);
+  EXPECT_EQ(std::move(successful_result2).get(), 456);
 
   // make sure server is shut down
   server_thread.join();
@@ -165,7 +166,7 @@ TEST_F(GracefulShutdownTest, NewRequestAfterPostShutdownTest) {
                std::exception);
 
   handler_->baton_.post();
-  EXPECT_EQ(successful_result.get(), 123);
+  EXPECT_EQ(std::move(successful_result).get(), 123);
   server_thread.join();
 }
 
@@ -205,7 +206,7 @@ TEST_F(GracefulShutdownTest, NewConnectionAfterPostShutdownTest) {
   EXPECT_EQ(cb.exception_.getType(), folly::AsyncSocketException::NOT_OPEN);
 
   handler_->baton_.post();
-  EXPECT_EQ(successful_result.get(), 123);
+  EXPECT_EQ(std::move(successful_result).get(), 123);
   server_thread.join();
 }
 
@@ -215,7 +216,7 @@ TEST_F(GracefulShutdownTest, NewConnectionAfterPostShutdownTest) {
 
 int main(int argc, char** argv) {
   FLAGS_logtostderr = 1;
-  google::InitGoogleLogging(argv[0]);
+  folly::Init init(&argc,&argv);
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
 }

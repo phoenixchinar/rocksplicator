@@ -25,8 +25,9 @@
 #include <vector>
 
 #include "common/stats/stats.h"
-#define private public
+#define EXPOSE_UNDERLYING_DB
 #include "rocksdb_replicator/rocksdb_replicator.h"
+#undef EXPOSE_UNDERLYING_DB
 #include "rocksdb/cache.h"
 #include "rocksdb/env.h"
 #include "rocksdb/filter_policy.h"

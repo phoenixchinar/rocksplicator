@@ -18,7 +18,7 @@
 
 #pragma once
 
-#include "folly/AtomicStruct.h"
+#include "folly/synchronization/AtomicStruct.h"
 #include "glog/logging.h"
 
 namespace common {

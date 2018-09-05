@@ -21,7 +21,7 @@
 #include <gflags/gflags.h>
 #include <glog/logging.h>
 
-#include "wangle/concurrent/CPUThreadPoolExecutor.h"
+#include "folly/executors/CPUThreadPoolExecutor.h"
 
 DEFINE_int32(global_worker_threads, sysconf(_SC_NPROCESSORS_ONLN),
              "The number of threads for global CPU executor.");
@@ -51,12 +51,12 @@ int GetQueueSize() {
 
 namespace common {
 
-wangle::CPUThreadPoolExecutor* getGlobalCPUExecutor() {
-  static wangle::CPUThreadPoolExecutor g_executor(
+folly::CPUThreadPoolExecutor* getGlobalCPUExecutor() {
+  static folly::CPUThreadPoolExecutor g_executor(
     GetThreadsCount(),
     std::make_unique<
-      wangle::LifoSemMPMCQueue<wangle::CPUThreadPoolExecutor::CPUTask,
-      wangle::QueueBehaviorIfFull::BLOCK>>(GetQueueSize()));
+      folly::LifoSemMPMCQueue<folly::CPUThreadPoolExecutor::CPUTask,
+      folly::QueueBehaviorIfFull::BLOCK>>(GetQueueSize()));
 
   return &g_executor;
 }

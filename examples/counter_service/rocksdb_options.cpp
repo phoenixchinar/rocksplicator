@@ -34,7 +34,7 @@ DEFINE_int32(max_compaction_threads,
              "The max number of threads for rocksdb compaction");
 DEFINE_int32(max_flush_threads, 4,
              "The max number of threads for rocksdb flush");
-DEFINE_int32(max_write_buffer_number, 4,
+DEFINE_int32(rs_max_write_buffer_number, 4,
              "The max number of write buffers per db");
 DEFINE_uint64(rocksdb_block_cache_size_gb, 20,
               "The size of RocksDB LRU block cache in GB");
@@ -80,7 +80,7 @@ rocksdb::Options __GetRocksdbOptions() {
     rocksdb::NewBlockBasedTableFactory(table_options));
 
   options.write_buffer_size = FLAGS_rocksdb_write_buffer_size_mb * MB;
-  options.max_write_buffer_number = FLAGS_max_write_buffer_number;
+  options.max_write_buffer_number = FLAGS_rs_max_write_buffer_number;
   options.min_write_buffer_number_to_merge = 1;
 
   options.level0_file_num_compaction_trigger = 4;

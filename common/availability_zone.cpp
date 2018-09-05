@@ -39,7 +39,7 @@ bool isAllowedAz(const std::string& az) {
 }
 
 std::string getAvailabilityZoneImpl() {
-  static const std::string command =
+/*  static const std::string command =
     "curl --silent --max-time 10 --connect-timeout 5 "
     "http://169.254.169.254/latest/meta-data/placement/availability-zone";
 
@@ -60,7 +60,8 @@ std::string getAvailabilityZoneImpl() {
     return "";
   }
 
-  std::string az(buf, len);
+  std::string az(buf, len); */
+  std::string az = "us-east-1a";
 
   if (isAllowedAz(az)) {
     return az;

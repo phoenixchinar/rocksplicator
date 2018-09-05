@@ -19,7 +19,7 @@
 #pragma once
 
 #include "aws/core/utils/ratelimiter/RateLimiterInterface.h"
-#include "folly/AtomicStruct.h"
+#include "folly/synchronization/AtomicStruct.h"
 #include "glog/logging.h"
 
 namespace common {

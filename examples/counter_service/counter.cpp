@@ -32,6 +32,7 @@
 #include "common/stats/stats.h"
 #include "common/stats/status_server.h"
 #include "gflags/gflags.h"
+#include "folly/init/Init.h"
 #include "rocksdb_admin/helix_client.h"
 #include "thrift/lib/cpp2/server/ThriftServer.h"
 
@@ -56,6 +57,7 @@ using std::chrono::milliseconds;
 
 int main(int argc, char** argv) {
   google::ParseCommandLineFlags(&argc, &argv, true);
+  folly::Init init(&argc, &argv);
 
   common::Stats::init(counter::getCounterNames(), counter::getMetricNames());
 

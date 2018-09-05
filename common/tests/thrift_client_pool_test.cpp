@@ -24,6 +24,7 @@
 #include <tuple>
 #include <vector>
 
+#include "folly/init/Init.h"
 #include "gtest/gtest.h"
 #include "common/tests/thrift/gen-cpp2/DummyService.h"
 #include "common/thrift_client_pool.h"
@@ -255,7 +256,7 @@ void stressTest(uint32_t nThreads, uint32_t nCalls, uint32_t nBatchSz,
           }
 
           for (auto& f : v) {
-            EXPECT_NO_THROW(f.get());
+            EXPECT_NO_THROW(std::move(f).get());
           }
         }
       });
@@ -291,6 +292,7 @@ TEST(ThriftClientTest, Stress) {
 }
 
 int main(int argc, char** argv) {
+  folly::Init init(&argc,&argv);
   ::testing::InitGoogleTest(&argc, argv);
   FLAGS_channel_cleanup_min_interval_seconds = -1;
   return RUN_ALL_TESTS();

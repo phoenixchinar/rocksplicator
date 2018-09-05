@@ -19,6 +19,7 @@
 
 #include "boost/filesystem.hpp"
 #include "folly/String.h"
+#include "folly/init/Init.h"
 #include "glog/logging.h"
 #include "gtest/gtest.h"
 #include "rocksdb/db.h"
@@ -122,6 +123,7 @@ TEST(AdminHandler, Basics) {
 }
 
 int main(int argc, char** argv) {
+  folly::Init init(&argc, &argv);
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
 }

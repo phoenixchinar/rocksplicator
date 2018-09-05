@@ -19,7 +19,7 @@
 #pragma once
 
 #include <boost/intrusive/list.hpp>
-#include <folly/detail/CacheLocality.h>
+#include <folly/concurrency/CacheLocality.h>
 #include <folly/MPMCQueue.h>
 #include <cstddef>
 #include <functional>
@@ -46,8 +46,8 @@ class ObjectLock {
   };
 
   struct Bucket {
-    MutexType bucketMutex FOLLY_ALIGN_TO_AVOID_FALSE_SHARING;
-    boost::intrusive::list<Node> nodes FOLLY_ALIGN_TO_AVOID_FALSE_SHARING;
+    MutexType bucketMutex alignas(folly::hardware_destructive_interference_size); // FOLLY_ALIGN_TO_AVOID_FALSE_SHARING;
+    boost::intrusive::list<Node> nodes alignas(folly::hardware_destructive_interference_size); // FOLLY_ALIGN_TO_AVOID_FALSE_SHARING;
 
     template <typename ALLOC>
     void Lock(const ObjectType& object, ALLOC&& alloc) {

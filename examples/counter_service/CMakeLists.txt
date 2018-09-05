@@ -9,12 +9,12 @@ list(REMOVE_ITEM SRC_FILES "./stress_test.cpp")
 INCLUDE_DIRECTORIES( ${CMAKE_BINARY_DIR}/rocksdb_admin/gen-cpp2 )
 add_library(counter_lib ${SRC_FILES})
 
-target_link_libraries(counter_lib counter_thrift rocksdb_admin)
+target_link_libraries(counter_lib counter_thrift rocksdb_admin transport concurrency)
 
 
 # Build counter service
 add_executable(counter ./counter.cpp)
-target_link_libraries(counter common counter_lib jemalloc)
+target_link_libraries(counter common counter_lib jemalloc ssl crypto async protocol transport concurrency)
 
 # Build stress test tool
 add_executable(stress ./stress_test.cpp)

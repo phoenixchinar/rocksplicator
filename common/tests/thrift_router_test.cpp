@@ -24,6 +24,7 @@
 #include <utility>
 #include <vector>
 
+#include "folly/init/Init.h"
 #include "gtest/gtest.h"
 
 #include "common/tests/thrift/gen-cpp2/DummyService.h"
@@ -919,6 +920,7 @@ TEST(ThriftRouterTest, UnreachableHost) {
 
 int main(int argc, char** argv) {
   FLAGS_always_prefer_local_host = false;
+  folly::Init init(&argc, &argv);
   ::testing::InitGoogleTest(&argc, argv);
   FLAGS_channel_cleanup_min_interval_seconds = -1;
   return RUN_ALL_TESTS();

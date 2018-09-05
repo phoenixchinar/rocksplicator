@@ -26,7 +26,7 @@ uint32_t ShardId(const std::string& key, const uint32_t num_shards) {
     hash_code = 31 * hash_code + key[i];
   }
 
-  return abs(hash_code % num_shards);
+  return abs((int)(hash_code % num_shards));
 }
 
 }  // anonymous namespace

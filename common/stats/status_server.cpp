@@ -125,15 +125,15 @@ std::string StatusServer::GetPageContent(const std::string& end_point) {
   folly::Uri u("http://blah.blah" + end_point);
   auto params = u.getQueryParams();
 
-  auto iter = op_map_.find(u.path().toStdString());
+  auto iter = op_map_.find(u.path());
   if (iter == op_map_.end()) {
     return  "Unsupported http path.\n";
   }
 
   std::vector<std::pair<std::string, std::string>> args;
   for (const auto& p : params) {
-    args.push_back(std::make_pair(p.first.toStdString(),
-                                  p.second.toStdString()));
+    args.push_back(std::make_pair(p.first,
+                                  p.second));
   }
 
   return iter->second(&args);

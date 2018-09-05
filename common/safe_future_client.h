@@ -28,7 +28,7 @@
 #include "folly/futures/Future.h"
 #include "folly/futures/Promise.h"
 #include "folly/io/async/EventBase.h"
-#include "wangle/concurrent/CPUThreadPoolExecutor.h"
+#include "folly/executors/CPUThreadPoolExecutor.h"
 
 namespace common {
 
