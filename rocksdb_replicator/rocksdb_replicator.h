@@ -51,6 +51,12 @@ struct LogExtractor : public rocksdb::WriteBatch::Handler {
     memcpy(&ms, blob.data(), sizeof(ms));
   }
 
+  bool Continue() override {
+	  return true;
+  }
+
+  ~LogExtractor() {
+  }
   uint64_t ms;
 };
 

@@ -23,4 +23,4 @@ add_custom_command(
 )
 INCLUDE_DIRECTORIES( ${CMAKE_BINARY_DIR}/rocksdb_admin/gen-cpp2 )
 add_library(counter_thrift ${GEN_FILES})
-target_link_libraries(counter_thrift thrift thriftprotocol thriftcpp2 thrift-core folly async protocol security transport concurrency com_err)
+target_link_libraries(counter_thrift thrift thriftprotocol thriftcpp2 thrift-core folly async protocol security transport concurrency com_err ssl crypto)
