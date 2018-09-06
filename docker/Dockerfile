@@ -136,40 +136,6 @@ RUN cd /opt && \
      ldconfig) && \
     rm -rf fbthrift
 
-# rocksdb
-RUN cd /opt/ && \
-    git clone https://github.com/facebook/rocksdb.git && \
-    (cd rocksdb && \
-     git checkout v5.14.3 && \
-#     sed -i -- 's/std::rindex/rindex/g' ./env/env_hdfs.cc && \
-#     sed -i -- '/"util\/string_util.h"/a #include "util\/logging.h"' ./env/env_hdfs.cc && \
-#     export CLASSPATH= && \
-#     for f in `find /usr/lib/hadoop-hdfs | grep jar`; do export CLASSPATH=$CLASSPATH:$f; done && \
-#     for f in `find /usr/lib/hadoop | grep jar`; do export CLASSPATH=$CLASSPATH:$f; done && \
-#     for f in `find /usr/lib/hadoop/client | grep jar`; do export CLASSPATH=$CLASSPATH:$f; done && \
-     USE_SSE=1 \
-#     USE_HDFS=1 \
-     JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64 \
-     LD_LIBRARY_PATH=$JAVA_HOME/jre/lib/amd64/server:$JAVA_HOME/jre/lib/amd64:/usr/lib/hadoop/lib/native \
-       JEMALLOC_LIB=" /usr/lib/x86_64-linux-gnu/libjemalloc.a" \
-       JEMALLOC_INCLUDE=" -I /usr/include/" \
-       EXTRA_CXXFLAGS="-gdwarf-2 -std=c++14 -O3 -fno-omit-frame-pointer" \
-       make -j ${BUILD_JOBS}  shared_lib && \
-     make install-shared && \
-     ldconfig) && \
-    rm -rf rocksdb
-
-# libbf (bloom filter)
-RUN cd /opt && \
-    git clone https://github.com/mavam/libbf.git && \
-    (cd libbf && \
-      git reset --hard ca634ad71fe3dd95f513965be6c1d3d7d1f7d5a2 && \
-      ./configure && \
-      make -j ${BUILD_JOBS} && \
-      make install && \
-      ldconfig) && \
-    rm -rf libbf
-
 # aws sdk
 RUN cd /opt && \
     git clone https://github.com/aws/aws-sdk-cpp.git && \
@@ -188,3 +154,43 @@ RUN cd /opt && \
       ldconfig) && \
     rm -rf aws-sdk-cpp
 
+# rocksdb
+RUN cd /opt/ && \
+    git clone https://github.com/facebook/rocksdb.git && \
+    (cd rocksdb && \
+     git checkout v5.14.3 && \
+#     sed -i -- 's/std::rindex/rindex/g' ./env/env_hdfs.cc && \
+#     sed -i -- '/"util\/string_util.h"/a #include "util\/logging.h"' ./env/env_hdfs.cc && \
+#     export CLASSPATH= && \
+#     for f in `find /usr/lib/hadoop-hdfs | grep jar`; do export CLASSPATH=$CLASSPATH:$f; done && \
+#     for f in `find /usr/lib/hadoop | grep jar`; do export CLASSPATH=$CLASSPATH:$f; done && \
+#     for f in `find /usr/lib/hadoop/client | grep jar`; do export CLASSPATH=$CLASSPATH:$f; done && \
+     USE_SSE=1 \
+#     USE_HDFS=1 \
+     JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64 \
+     LD_LIBRARY_PATH=$JAVA_HOME/jre/lib/amd64/server:$JAVA_HOME/jre/lib/amd64:/usr/lib/hadoop/lib/native \
+       JEMALLOC_LIB=" /usr/lib/x86_64-linux-gnu/libjemalloc.a" \
+       JEMALLOC_INCLUDE=" -I /usr/include/" \
+       EXTRA_CXXFLAGS="-gdwarf-2 -std=c++14 -O3 -fno-omit-frame-pointer" \
+       USE_RTTI=1 \
+       make -j ${BUILD_JOBS} static_lib  && \
+     make -j ${BUILD_JOBS} install-static && \
+     ldconfig) && \
+    rm -rf rocksdb
+
+# libbf (bloom filter)
+RUN cd /opt && \
+    git clone https://github.com/mavam/libbf.git && \
+    (cd libbf && \
+      git reset --hard ca634ad71fe3dd95f513965be6c1d3d7d1f7d5a2 && \
+      ./configure && \
+      make -j ${BUILD_JOBS} && \
+      make install && \
+      ldconfig) && \
+    rm -rf libbf
+
+RUN cd / && git clone https://github.com/phoenixchinar/rocksplicator.git 
+RUN cd /rocksplicator && git submodule init && git submodule update
+RUN cd /rocksplicator && git pull
+RUN (cd rocksplicator && mkdir build && cd build && cmake .. && \
+     make -j ${BUILD_JOBS} counter )
