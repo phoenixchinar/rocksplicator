@@ -14,7 +14,7 @@ target_link_libraries(counter_lib counter_thrift rocksdb_admin transport concurr
 
 # Build counter service
 add_executable(counter ./counter.cpp)
-target_link_libraries(counter common counter_lib jemalloc ssl crypto async protocol transport concurrency)
+target_link_libraries(counter common counter_lib jemalloc ssl crypto async protocol transport concurrency unwind)
 
 # Build stress test tool
 add_executable(stress ./stress_test.cpp)

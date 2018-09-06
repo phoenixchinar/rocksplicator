@@ -22,4 +22,4 @@ add_custom_command(
   DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/replicator.thrift)
 
 add_library(replicator_thrift ${GEN_FILES})
-target_link_libraries(replicator_thrift thrift thriftprotocol thrift-core protocol transport concurrency async)
+target_link_libraries(replicator_thrift thrift thriftprotocol thrift-core thriftfrozen2 wangle protocol transport concurrency async gssapi_krb5 ssl crypto)
