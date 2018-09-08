@@ -78,8 +78,9 @@ RUN apt-get -q -y install \
       libzstd-dev \  
       libmstch-dev \
       thrift-compiler \
-      libfarmhash-dev 
-
+      libfarmhash-dev \
+      libsodium-dev \
+      gperf
 # Install awscli
 RUN cd /opt && \
     wget https://s3.amazonaws.com/aws-cli/awscli-bundle.zip && \
@@ -188,6 +189,20 @@ RUN cd /opt && \
       make install && \
       ldconfig) && \
     rm -rf libbf
+
+RUN cd /opt && \
+    git clone https://github.com/facebookincubator/fizz.git && \
+    ( cd fizz && git checkout 32e04c5bdebe98e3bdcc0d11877a03bd6ab91c1d && \
+    mkdir _build && cd _build && cmake configure ../fizz/ && make -j ${BUILD_JOBS} && \
+    make install ) && rm -Rf fizz
+
+RUN cd /opt && \
+    git clone https://github.com/facebook/proxygen.git && \
+    ( cd proxygen && git checkout 49e1c2a3261835a4f8defb723584ce2cd69a32bc && \
+    cd proxygen && autoreconf -ivf && \ 
+       CXXFLAGS="-fno-omit-frame-pointer -g" LIBS="-lfolly -lboost_context -lunwind -levent -ldl -lssl -lcrypto" ./configure --disable-shared  && \
+     export AM_LIBTOOLFLAGS='--preserve-dup-deps'; make -j ${BUILD_JOBS} && \
+     make install ) && rm -Rf proxygen
 
 RUN cd / && git clone https://github.com/phoenixchinar/rocksplicator.git 
 RUN cd /rocksplicator && git submodule init && git submodule update
